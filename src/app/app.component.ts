@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Http} from "@angular/http";
 
 declare let SockJS;
 declare let Stomp;
@@ -19,9 +20,11 @@ export class AppComponent implements OnInit {
   interactive_plot : any = null;
   flot_data : any = [];
 
+  time_span : number = 1000;
+
   messages : string[] = [];
 
-  constructor(){}
+  constructor(private http: Http) {}
 
   ngOnInit() {
 
@@ -116,6 +119,17 @@ export class AppComponent implements OnInit {
     }
 
     return res;
+  }
+
+  sendTimeSpan(){
+
+    let url = this.host + '/timespan?span=' + this.time_span;
+
+    this.http.get(url).subscribe(
+      (res) => console.info('Success!'),
+      (error) => alert(error)
+    );
+
   }
 
 }
