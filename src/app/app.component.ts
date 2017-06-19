@@ -13,7 +13,7 @@ declare var $ : any;
 })
 export class AppComponent implements OnInit {
 
-  host : string = "http://localhost:8080";
+  host : string = "http://192.168.0.62:7755";
   bConnected : boolean = false;
   stompClient : any = null;
 
@@ -72,14 +72,19 @@ export class AppComponent implements OnInit {
 
       var socket = new SockJS(this.host + '/gs-guide-websocket');
       this.stompClient = Stomp.over(socket);
+
       this.stompClient.connect({}, (frame) => {
+
         this.bConnected = true;
 
         console.log('Connected: ' + frame);
 
         this.stompClient.subscribe('/topic/flotdata',  data => {
-
+          console.info(1111111111111111)
+          console.info(JSON.parse(data.body))
+          console.info(22222222222222)
           let times = JSON.parse(data.body).times;
+          console.info(times)
           let yValue = JSON.parse(data.body).yValue;
 
           this.flot(yValue + 50);
@@ -95,6 +100,7 @@ export class AppComponent implements OnInit {
       });
 
     }
+
   }
 
 
@@ -122,13 +128,14 @@ export class AppComponent implements OnInit {
   }
 
   sendTimeSpan(){
+    var name = "fff";
+    this.stompClient.send("/app/hello", {atytopic:"11f4sf"}, name);
+    // let url = this.host + '/timespan?span=' + this.time_span;
 
-    let url = this.host + '/timespan?span=' + this.time_span;
-
-    this.http.get(url).subscribe(
-      (res) => console.info('Success!'),
-      (error) => alert(error)
-    );
+    // this.http.get(url).subscribe(
+    //   (res) => console.info('Success!'),
+    //   (error) => alert(error)
+    // );
 
   }
 
